@@ -6,25 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        body {text-align: center;}
-        #enterDetails {float: left; width: 50%;  background-color: darkslategray; color: floralwhite;}
-        #findDetails {float: left; width: 50%; background-color: floralwhite; color: darkslategray;}
-        input {width: 120px;}
+        body { text-align: center; }
+        #enterDetails { float: left; width: 50%;  background-color: darkslategray; color: floralwhite; }
+        #findDetails { float: left; width: 50%; background-color: floralwhite; color: darkslategray; }
+        input { width: 120px; }
     </style>
 </head>
 <body>
     <div id="enterDetails">
         <h1>Enter details</h1>
-
         <h4>ID</h4> 
         <input id="enterID" type="text"> 
-
         <h4>Name</h4> 
         <input id="enterName" type="text"> 
-
         <h4>Age</h4> 
         <input id="enterAge" type="number"> <br><br>
-
         <button id="insert">INSERT</button>
         <button id="update">UPDATE</button>
         <button id="remove">REMOVE</button> <br><br>
@@ -38,38 +34,26 @@
         <h3 id="findName" type="text"></h3>
         <h3 id="findAge" type="number"></h3> <br><br>
     </div>
-    
 
     <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getDatabase, ref, get, set, child, update, remove } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
 
-        <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCooX9Vf7l2RfgWO0pWXeaJ8MIwSAcle8w",
-    authDomain: "authenticated-profile-app.firebaseapp.com",
-    databaseURL: "https://authenticated-profile-app-default-rtdb.firebaseio.com",
-    projectId: "authenticated-profile-app",
-    storageBucket: "authenticated-profile-app.appspot.com",
-    messagingSenderId: "832635986567",
-    appId: "1:832635986567:web:7c8e20dc211f33f6ad4e22"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
-   
-
-        import {getDatabase, ref, get, set, child, update, remove}
-        from //Copy and Paste the URL from near the top of the CDN you pasted in from firebase
-        // (the one where you imported "initializeApp" from),
-        //but change "firebase-app" to "firebase-database"
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
         
-
         const db = getDatabase();
 
         var enterID = document.querySelector("#enterID");
@@ -78,7 +62,6 @@
         var findID = document.querySelector("#findID");
         var findName = document.querySelector("#findName");
         var findAge = document.querySelector("#findAge");
-      
 
         var insertBtn = document.querySelector("#insert");
         var updateBtn = document.querySelector("#update");
@@ -112,9 +95,8 @@
                 }
             })
             .catch((error)=>{
-                alert(error)
-            })
-            
+                alert(error);
+            });
         }
 
         function UpdateData(){
@@ -144,7 +126,6 @@
         updateBtn.addEventListener('click', UpdateData);
         removeBtn.addEventListener('click', RemoveData);
         findBtn.addEventListener('click', FindData);
-
-      </script>
+    </script>
 </body>
 </html>
