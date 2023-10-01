@@ -107,6 +107,9 @@
     <iframe src="https://thunkable.site/w/pAtrYwy5mx8r4Ks7sN1AR" title="Dangram" height=750 width=500></iframe>
 
     <script type="module">
+
+        import {getDatabase, ref, get, set, child, update, remove}
+            
         const firebaseConfig = {
             apiKey: "AIzaSyCooX9Vf7l2RfgWO0pWXeaJ8MIwSAcle8w",
             authDomain: "authenticated-profile-app.firebaseapp.com",
@@ -139,11 +142,11 @@
         });
 
         function manageData(action) {
-            const id = enterID.value;
-            const name = enterName.value;
-            const dateTaken = enterDate.value;
-            const location = enterLocation.value;
-            const bio = enterBio.value;
+            const id = document.getElementById("enterID").value;
+            const name = document.getElementById("enterName").value;
+            const dateTaken = document.getElementById("enterDate").value;
+            const location = document.getElementById("enterLocation").value;
+            const bio = document.getElementById("enterBio").value;
 
         if (!id) {
             alert("Please enter an ID.");
