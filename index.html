@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Web App</title>
+    <title>DanGram</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -96,7 +96,9 @@
     <script type="module">
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        
+        import { getDatabase, ref, set, update, remove } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCooX9Vf7l2RfgWO0pWXeaJ8MIwSAcle8w",
             authDomain: "authenticated-profile-app.firebaseapp.com",
@@ -107,17 +109,18 @@
             appId: "1:832635986567:web:7c8e20dc211f33f6ad4e22"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
 
-        import {getDatabase, ref, get, set, child, update, remove}
-        from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
-
+        // Firebase database reference
         const db = getDatabase();
 
         const userProfilesContainer = document.getElementById('userProfilesContainer');
 
+        // Function to render user profiles
         function renderUserProfiles() {
-            const userProfilesRef = db.ref('People');
+            const userProfilesContainer = document.getElementById('userProfilesContainer');
+            const userProfilesRef = ref(db, 'People');
             userProfilesRef.on('value', (snapshot) => {
                 userProfilesContainer.innerHTML = '';
 
@@ -140,8 +143,7 @@
             });
         }
 
-        renderUserProfiles();
-
+         // Function to manage data (insert, update, remove)
         function manageData(action) {
             const id = document.getElementById("enterID").value;
             const name = document.getElementById("enterName").value;
@@ -149,65 +151,75 @@
             const location = document.getElementById("enterLocation").value;
             const bio = document.getElementById("enterBio").value;
 
-        if (!id) {
-            alert("Please enter an ID.");
-            return;
+            if (!id) {
+                alert("Please enter an ID.");
+                return;
+            }
+
+            if (!name || !dateTaken || !location || !bio) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const newData = {
+                Name: name,
+                DateTaken: dateTaken,
+                Location: location,
+                Bio: bio
+            };
+
+            const dataRef = ref(db, "People/" + id);
+
+            switch (action) {
+                case 'insert':
+                    set(dataRef, newData)
+                        .then(() => {
+                            alert("Data added successfully");
+                            renderUserProfiles();
+                        })
+                        .catch((error) => {
+                            alert(error.message);
+                        });
+                    break;
+                case 'update':
+                    update(dataRef, newData)
+                        .then(() => {
+                            alert("Data updated successfully");
+                            renderUserProfiles();
+                        })
+                        .catch((error) => {
+                            alert(error.message);
+                        });
+                    break;
+                case 'remove':
+                    remove(dataRef)
+                        .then(() => {
+                            alert("Data deleted successfully");
+                            renderUserProfiles();
+                        })
+                        .catch((error) => {
+                            alert(error.message);
+                        });
+                    break;
+                default:
+                    alert("Invalid action.");
+            }
         }
 
-        if (!name || !dateTaken || !location || !bio) {
-            alert("Please fill in all fields.");
-            return;
-        }
+        // Event listener for DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function () {
+            // Event listeners for buttons
+            const INSERT = document.getElementById('insert');
+            const UPDATE = document.getElementById('update');
+            const REMOVE = document.getElementById('remove');
 
-        const newData = {
-            Name: name,
-            DateTaken: dateTaken,
-            Location: location,
-            Bio: bio
-        };
+            INSERT.addEventListener('click', () => manageData('insert'));
+            UPDATE.addEventListener('click', () => manageData('update'));
+            REMOVE.addEventListener('click', () => manageData('remove'));
 
-        const dataRef = ref(db, "People/" + id);
-
-        switch (action) {
-            case 'insert':
-                set(dataRef, newData)
-                    .then(() => {
-                        alert("Data added successfully");
-                    })
-                    .catch((error) => {
-                        alert(error.message);
-                    });
-                break;
-            case 'update':
-                update(dataRef, newData)
-                    .then(() => {
-                        alert("Data updated successfully");
-                    })
-                    .catch((error) => {
-                        alert(error.message);
-                    });
-                break;
-            case 'remove':
-                remove(dataRef)
-                    .then(() => {
-                        alert("Data deleted successfully");
-                    })
-                    .catch((error) => {
-                        alert(error.message);
-                    });
-                break;
-            default:
-                alert("Invalid action.");
-        }
-    }
-
-        const INSERT = document.getElementById('INSERT');
-        const UPDATE = document.getElementById('UPDATE');
-        const REMOVE = document.getElementById('REMOVE');
-
-        INSERT.addEventListener('click', () => manageData('insert'));
-        UPDATE.addEventListener('click', () => manageData('update'));
-        REMOVE.addEventListener('click', () => manageData('remove'));
+            // Render user profiles initially
+            renderUserProfiles();
+        });
 
     </script>
 </body>
