@@ -132,10 +132,10 @@
                     userProfileDiv.innerHTML = `
                         <h2>User Profile</h2>
                         <p>ID: ${childSnapshot.key}</p>
-                        <p>Name: ${userData.Name}</p>
-                        <p>Date: ${userData.DateTaken}</p>
-                        <p>Location: ${userData.Location}</p>
-                        <p>Bio: ${userData.Bio}</p>
+                        <p>Name: ${userData.name}</p>
+                        <p>Date: ${userData.date}</p>
+                        <p>Location: ${userData.location}</p>
+                        <p>Bio: ${userData.bio}</p>
                     `;
 
                     userProfilesContainer.appendChild(userProfileDiv);
@@ -156,16 +156,16 @@
                 return;
             }
 
-            if (!name || !dateTaken || !location || !bio) {
+            if (!name || !date || !location || !bio) {
                 alert("Please fill in all fields.");
                 return;
             }
 
             const newData = {
-                Name: name,
-                DateTaken: dateTaken,
-                Location: location,
-                Bio: bio
+                name: name,
+                date: date,
+                location: location,
+                bio: bio
             };
 
             const dataRef = ref(db, "People/" + id);
