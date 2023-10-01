@@ -99,7 +99,7 @@
             <h2>User 2 Profile</h2>
             <p>Name: <span id="user2Name"></span></p>
             <p>Date: <span id="user2Date"></span></p>
-            <p>Location: <span id="user12ocation"></span></p>
+            <p>Location: <span id="user2Location"></span></p>
             <p>Bio: <span id="user2Bio"></span></p>
         </div>
     </div>
@@ -120,30 +120,30 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         
-        const user1Ref = db.ref("aHQfHV1md7ZinVaYKP7Y3HaOp4M2");
-        user1Ref.on("value", (snapshot) => {
+        const user1Ref = db.ref("People/User1ID");
+        user1Ref.on("aHQfHV1md7ZinVaYKP7Y3HaOp4M2", (snapshot) => {
             const user1Data = snapshot.val();
             document.getElementById("user1Name").textContent = user1Data.Name;
-            document.getElementById("user1Date").textContent = user1Data.Date;
+            document.getElementById("user1Date").textContent = user1Data.DateTaken;
             document.getElementById("user1Location").textContent = user1Data.Location;
             document.getElementById("user1Bio").textContent = user1Data.Bio;
         });
 
-        const user2Ref = db.ref("jIcEFWxGPedJZu9llVKLq3rk6pM2");
-        user2Ref.on("value", (snapshot) => {
+        const user2Ref = db.ref("People/User2ID");
+        user2Ref.on("jIcEFWxGPedJZu9llVKLq3rk6pM2", (snapshot) => {
             const user2Data = snapshot.val();
             document.getElementById("user2Name").textContent = user2Data.Name;
-            document.getElementById("user2Date").textContent = user1Data.Date;
-            document.getElementById("user2Location").textContent = user1Data.Location;
+            document.getElementById("user2Date").textContent = user2Data.DateTaken;
+            document.getElementById("user2Location").textContent = user2Data.Location;
             document.getElementById("user2Bio").textContent = user2Data.Bio;
         });
 
-            function manageData(action) {
-        const id = enterID.value;
-        const name = enterName.value;
-        const dateTaken = enterDate.value;
-        const location = enterLocation.value;
-        const bio = enterBio.value;
+        function manageData(action) {
+            const id = enterID.value;
+            const name = enterName.value;
+            const dateTaken = enterDate.value;
+            const location = enterLocation.value;
+            const bio = enterBio.value;
 
         if (!id) {
             alert("Please enter an ID.");
