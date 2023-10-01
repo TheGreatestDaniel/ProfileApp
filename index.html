@@ -95,8 +95,8 @@
 
     <script type="module">
 
-        import {getDatabase, ref, get, set, child, update, remove}
-            
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyCooX9Vf7l2RfgWO0pWXeaJ8MIwSAcle8w",
             authDomain: "authenticated-profile-app.firebaseapp.com",
@@ -107,9 +107,13 @@
             appId: "1:832635986567:web:7c8e20dc211f33f6ad4e22"
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        
+        const app = initializeApp(firebaseConfig);
+
+        import {getDatabase, ref, get, set, child, update, remove}
+        from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+
+        const db = getDatabase();
+
         const userProfilesContainer = document.getElementById('userProfilesContainer');
 
         function renderUserProfiles() {
@@ -197,9 +201,13 @@
         }
     }
 
-    INSERT.addEventListener('click', () => manageData('insert'));
-    UPDATE.addEventListener('click', () => manageData('update'));
-    REMOVE.addEventListener('click', () => manageData('remove'));
+        const INSERT = document.getElementById('INSERT');
+        const UPDATE = document.getElementById('UPDATE');
+        const REMOVE = document.getElementById('REMOVE');
+
+        INSERT.addEventListener('click', () => manageData('insert'));
+        UPDATE.addEventListener('click', () => manageData('update'));
+        REMOVE.addEventListener('click', () => manageData('remove'));
 
     </script>
 </body>
