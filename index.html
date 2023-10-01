@@ -86,22 +86,9 @@
         <button id="remove">REMOVE</button>
     </div>
 
-    <div id="user-profiles">
-        <div class="user-profile">
-            <h2>User 1 Profile</h2>
-            <p>Name: <span id="user1Name"></span></p>
-            <p>Date: <span id="user1Date"></span></p>
-            <p>Location: <span id="user1Location"></span></p>
-            <p>Bio: <span id="user1Bio"></span></p>
-        </div>
-
-        <div class="user-profile">
-            <h2>User 2 Profile</h2>
-            <p>Name: <span id="user2Name"></span></p>
-            <p>Date: <span id="user2Date"></span></p>
-            <p>Location: <span id="user2Location"></span></p>
-            <p>Bio: <span id="user2Bio"></span></p>
-        </div>
+    <div id="allUserProfiles">
+        <h1>All User Profiles</h1>
+        <div id="userProfilesContainer"></div>
     </div>
 
     <iframe src="https://thunkable.site/w/pAtrYwy5mx8r4Ks7sN1AR" title="Dangram" height=750 width=500></iframe>
@@ -123,23 +110,33 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         
-        const user1Ref = db.ref("People/User1ID");
-        user1Ref.on("aHQfHV1md7ZinVaYKP7Y3HaOp4M2", (snapshot) => {
-            const user1Data = snapshot.val();
-            document.getElementById("user1Name").textContent = user1Data.Name;
-            document.getElementById("user1Date").textContent = user1Data.DateTaken;
-            document.getElementById("user1Location").textContent = user1Data.Location;
-            document.getElementById("user1Bio").textContent = user1Data.Bio;
-        });
+        const userProfilesContainer = document.getElementById('userProfilesContainer');
 
-        const user2Ref = db.ref("People/User2ID");
-        user2Ref.on("jIcEFWxGPedJZu9llVKLq3rk6pM2", (snapshot) => {
-            const user2Data = snapshot.val();
-            document.getElementById("user2Name").textContent = user2Data.Name;
-            document.getElementById("user2Date").textContent = user2Data.DateTaken;
-            document.getElementById("user2Location").textContent = user2Data.Location;
-            document.getElementById("user2Bio").textContent = user2Data.Bio;
-        });
+        function renderUserProfiles() {
+            const userProfilesRef = db.ref('People');
+            userProfilesRef.on('value', (snapshot) => {
+                userProfilesContainer.innerHTML = '';
+
+                snapshot.forEach((childSnapshot) => {
+                    const userData = childSnapshot.val();
+                    const userProfileDiv = document.createElement('div');
+                    userProfileDiv.classList.add('user-profile');
+
+                    userProfileDiv.innerHTML = `
+                        <h2>User Profile</h2>
+                        <p>ID: ${childSnapshot.key}</p>
+                        <p>Name: ${userData.Name}</p>
+                        <p>Date: ${userData.DateTaken}</p>
+                        <p>Location: ${userData.Location}</p>
+                        <p>Bio: ${userData.Bio}</p>
+                    `;
+
+                    userProfilesContainer.appendChild(userProfileDiv);
+                });
+            });
+        }
+
+        renderUserProfiles();
 
         function manageData(action) {
             const id = document.getElementById("enterID").value;
@@ -200,9 +197,9 @@
         }
     }
 
-    insertBtn.addEventListener('click', () => manageData('insert'));
-    updateBtn.addEventListener('click', () => manageData('update'));
-    removeBtn.addEventListener('click', () => manageData('remove'));
+    INSERT.addEventListener('click', () => manageData('insert'));
+    UPDATE.addEventListener('click', () => manageData('update'));
+    REMOVE.addEventListener('click', () => manageData('remove'));
 
     </script>
 </body>
