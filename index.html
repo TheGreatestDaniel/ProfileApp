@@ -177,7 +177,6 @@
             })
             .then(()=>{
                 alert("Data added successfully");
-                displayAllUserProfiles();
             })
             .catch((error)=>{
                 alert(error);
@@ -212,7 +211,6 @@
             })
             .then(()=>{
                 alert("Data updated successfully");
-                displayAllUserProfiles();
             })
             .catch((error)=>{
                 alert(error);
@@ -223,7 +221,6 @@
             remove(ref(db, "People/"+ enterID.value))
             .then(()=>{
                 alert("Data deleted successfully");
-                displayAllUserProfiles();
             })
             .catch((error)=>{
                 alert(error);
