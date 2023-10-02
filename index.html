@@ -88,11 +88,6 @@
         <button id="remove">REMOVE</button>
     </div>
 
-    <div id="allUserProfiles">
-        <h1>All User Profiles</h1>
-        <div id="userProfilesContainer"></div>
-    </div>
-
     <iframe src="https://thunkable.site/w/pAtrYwy5mx8r4Ks7sN1AR" title="Dangram" height=750 width=500></iframe>
     
     <script type="module">
@@ -114,39 +109,6 @@
         // Initialize Firebase
         const firebaseApp = initializeApp(firebaseConfig);
 
-        // Wait for the DOM to fully load before executing this code
-        document.addEventListener("DOMContentLoaded", function () {
-            const db = getDatabase(firebaseApp);
-            const userProfilesContainer = document.querySelector("#userProfilesContainer");
-
-            // Function to display user profiles
-            function displayUserProfiles(dataSnapshot) {
-                userProfilesContainer.innerHTML = ""; // Clear the existing content
-                dataSnapshot.forEach((childSnapshot) => {
-                    const userData = childSnapshot.val();
-                    const userProfile = document.createElement("div");
-                    userProfile.className = "user-profile";
-                    userProfile.innerHTML = `
-                        <h3>Name: ${userData.Name}</h3>
-                        <p>ID: ${userData.ID}</p>
-                        <p>Date: ${userData.Date}</p>
-                        <p>Location: ${userData.Location}</p>
-                        <p>Bio: ${userData.Bio}</p>
-                    `;
-                    userProfilesContainer.appendChild(userProfile);
-                });
-            }
-
-            // Load user profiles when the page loads
-            const dbRef = ref(db, "People");
-            get(dbRef).then((snapshot) => {
-                if (snapshot.exists()) {
-                    displayUserProfiles(snapshot);
-                } else {
-                    userProfilesContainer.innerHTML = "<p>No user profiles found.</p>";
-                }
-            });
-        
         const db = getDatabase(firebaseApp);
 
         var enterID = document.querySelector("#enterID");
@@ -231,13 +193,6 @@
         updateBtn.addEventListener('click', UpdateData);
         removeBtn.addEventListener('click', RemoveData);
         findBtn.addEventListener('click', FindData);
-
-
-
-
-        
-        
-        
 
     </script>
 </body>
