@@ -125,7 +125,7 @@
         var findLocation = document.querySelector("#findLocation");
         var findBio = document.querySelector("#findBio");
 
-        var inserBtn = document.querySelector("#insert");
+        var insertBtn = document.querySelector("#insert");
         var updateBtn = document.querySelector("#update");
         var removeBtn = document.querySelector("#remove");
         var findBtn = document.querySelector("#find");
@@ -153,7 +153,9 @@
             .then((snapshot)=>{
                 if(snapshot.exists()){
                     findName.innerHTML = "Name: " + snapshot.val().Name;
-                    findAge.innerHTML = "Age: " + snapshot.val().Age;
+                    findDate.innerHTML = "Date: " + snapshot.val().Date;
+                    findLocation.innerHTML = "Location: " + snapshot.val().Location;
+                    findBio.innerHTML = "Bio: " + snapshot.val().Bio;
                 } else {
                     alert("No data found");
                 }
@@ -167,7 +169,9 @@
         function UpdateData(){
             update(ref(db, "People/"+ enterID.value),{
                 Name: enterName.value,
-                Age: enterAge.value
+                Date: enterDate.value,
+                Location: enterLocation.value,
+                Bio: enterBio.value
             })
             .then(()=>{
                 alert("Data updated successfully");
