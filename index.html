@@ -111,7 +111,10 @@
             appId: "1:832635986567:web:7c8e20dc211f33f6ad4e22"
         };
         
-        const db = getDatabase();
+        // Initialize Firebase
+        const firebaseApp = initializeApp(firebaseConfig);
+
+        const db = getDatabase(firebaseApp);
 
         var enterID = document.querySelector("#enterID");
         var enterName = document.querySelector("#enterName");
