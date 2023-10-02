@@ -111,8 +111,9 @@
             appId: "1:832635986567:web:7c8e20dc211f33f6ad4e22"
         };
 
+        // Function to display user profiles
         function displayUserProfiles(dataSnapshot) {
-            userProfilesContainer.innerHTML = "";
+            userProfilesContainer.innerHTML = ""; // Clear the existing content
             dataSnapshot.forEach((childSnapshot) => {
                 const userData = childSnapshot.val();
                 const userProfile = document.createElement("div");
@@ -128,8 +129,9 @@
             });
         }
 
+        // Load user profiles when the page loads
         const dbRef = ref(db, "People");
-        onValue(dbRef, (snapshot) => {
+        get(dbRef).then((snapshot) => {
             if (snapshot.exists()) {
                 displayUserProfiles(snapshot);
             } else {
