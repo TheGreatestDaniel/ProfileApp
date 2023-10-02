@@ -111,6 +111,40 @@
 
         const db = getDatabase(firebaseApp);
 
+        // Function to fetch and display all user profiles
+        function displayAllUserProfiles() {
+            const userProfilesContainer = document.getElementById("userProfilesContainer");
+
+            // Reference to the "People" node in the database
+            const peopleRef = ref(db, "People");
+
+            // Fetch all user profiles from the database
+            get(peopleRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+
+                    // Loop through the user profiles and display them
+                    for (const userId in data) {
+                        const userProfile = data[userId];
+                        const userProfileDiv = document.createElement("div");
+                        userProfileDiv.classList.add("user-profile");
+                        userProfileDiv.innerHTML = `
+                            <h2>Name: ${userProfile.Name}</h2>
+                            <p>ID: ${userProfile.ID}</p>
+                            <p>Date Taken: ${userProfile.Date}</p>
+                            <p>Location: ${userProfile.Location}</p>
+                            <p>Bio: ${userProfile.Bio}</p>
+                        `;
+                        userProfilesContainer.appendChild(userProfileDiv);
+                    }
+                }
+            }).catch((error) => {
+                console.error("Error fetching user profiles:", error);
+            });
+        }
+
+        displayAllUserProfiles();
+
         var enterID = document.querySelector("#enterID");
         var enterName = document.querySelector("#enterName");
         var enterDate = document.querySelector("#enterDate");
@@ -161,7 +195,6 @@
             .catch((error)=>{
                 alert(error)
             })
-            
         }
 
         function UpdateData(){
