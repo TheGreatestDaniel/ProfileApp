@@ -110,38 +110,43 @@
             messagingSenderId: "832635986567",
             appId: "1:832635986567:web:7c8e20dc211f33f6ad4e22"
         };
-
-        // Function to display user profiles
-        function displayUserProfiles(dataSnapshot) {
-            userProfilesContainer.innerHTML = ""; // Clear the existing content
-            dataSnapshot.forEach((childSnapshot) => {
-                const userData = childSnapshot.val();
-                const userProfile = document.createElement("div");
-                userProfile.className = "user-profile";
-                userProfile.innerHTML = `
-                    <h3>Name: ${userData.Name}</h3>
-                    <p>ID: ${userData.ID}</p>
-                    <p>Date: ${userData.Date}</p>
-                    <p>Location: ${userData.Location}</p>
-                    <p>Bio: ${userData.Bio}</p>
-                `;
-                userProfilesContainer.appendChild(userProfile);
-            });
-        }
-
-        // Load user profiles when the page loads
-        const dbRef = ref(db, "People");
-        get(dbRef).then((snapshot) => {
-            if (snapshot.exists()) {
-                displayUserProfiles(snapshot);
-            } else {
-                userProfilesContainer.innerHTML = "<p>No user profiles found.</p>";
-            }
-        });
         
         // Initialize Firebase
         const firebaseApp = initializeApp(firebaseConfig);
 
+        // Wait for the DOM to fully load before executing this code
+        document.addEventListener("DOMContentLoaded", function () {
+            const db = getDatabase(firebaseApp);
+            const userProfilesContainer = document.querySelector("#userProfilesContainer");
+
+            // Function to display user profiles
+            function displayUserProfiles(dataSnapshot) {
+                userProfilesContainer.innerHTML = ""; // Clear the existing content
+                dataSnapshot.forEach((childSnapshot) => {
+                    const userData = childSnapshot.val();
+                    const userProfile = document.createElement("div");
+                    userProfile.className = "user-profile";
+                    userProfile.innerHTML = `
+                        <h3>Name: ${userData.Name}</h3>
+                        <p>ID: ${userData.ID}</p>
+                        <p>Date: ${userData.Date}</p>
+                        <p>Location: ${userData.Location}</p>
+                        <p>Bio: ${userData.Bio}</p>
+                    `;
+                    userProfilesContainer.appendChild(userProfile);
+                });
+            }
+
+            // Load user profiles when the page loads
+            const dbRef = ref(db, "People");
+            get(dbRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    displayUserProfiles(snapshot);
+                } else {
+                    userProfilesContainer.innerHTML = "<p>No user profiles found.</p>";
+                }
+            });
+        
         const db = getDatabase(firebaseApp);
 
         var enterID = document.querySelector("#enterID");
