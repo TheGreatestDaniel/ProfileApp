@@ -50,12 +50,14 @@
     </style>
 </head>
 <body>
+    
     <div style="position: relative; width: 100%; height: 33%; padding-top: 33.3333%;
         padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
         border-radius: 8px; will-change: transform;">
     <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
         src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFv-hJ1wcw&#x2F;view?embed">
     </iframe>
+        
 </div>
 
     <div id="findDetails">
@@ -92,11 +94,11 @@
     </div>
 
     <iframe src="https://thunkable.site/w/pAtrYwy5mx8r4Ks7sN1AR" title="Dangram" height=750 width=500></iframe>
-
+    
     <script type="module">
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getDatabase, ref, set, update, remove } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+        import { getDatabase, set, get, update, remove, ref, child } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -108,118 +110,94 @@
             messagingSenderId: "832635986567",
             appId: "1:832635986567:web:7c8e20dc211f33f6ad4e22"
         };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-
-        // Firebase database reference
+        
         const db = getDatabase();
 
-        const userProfilesContainer = document.getElementById('userProfilesContainer');
+        var enterID = document.querySelector("#enterID");
+        var enterName = document.querySelector("#enterName");
+        var enterDate = document.querySelector("#enterDate");
+        var enterLocation = document.querySelector("#enterLocation");
+        var enterBio = document.querySelector("#enterBio");
 
-        // Function to render user profiles
-        function renderUserProfiles() {
-            const userProfilesContainer = document.getElementById('userProfilesContainer');
-            const userProfilesRef = ref(db, 'People');
-            userProfilesRef.on('value', (snapshot) => {
-                userProfilesContainer.innerHTML = '';
+        var findID = document.querySelector("#findID");
+        var findName = document.querySelector("#findName");
+        var findDate = document.querySelector("#findDate");
+        var findLocation = document.querySelector("#findLocation");
+        var findBio = document.querySelector("#findBio");
 
-                snapshot.forEach((childSnapshot) => {
-                    const userData = childSnapshot.val();
-                    const userProfileDiv = document.createElement('div');
-                    userProfileDiv.classList.add('user-profile');
+        var inserBtn = document.querySelector("#insert");
+        var updateBtn = document.querySelector("#update");
+        var removeBtn = document.querySelector("#remove");
+        var findBtn = document.querySelector("#find");
 
-                    userProfileDiv.innerHTML = `
-                        <h2>User Profile</h2>
-                        <p>ID: ${childSnapshot.key}</p>
-                        <p>Name: ${userData.name}</p>
-                        <p>Date: ${userData.date}</p>
-                        <p>Location: ${userData.location}</p>
-                        <p>Bio: ${userData.bio}</p>
-                    `;
-
-                    userProfilesContainer.appendChild(userProfileDiv);
-                });
+        function InsertData() {
+            set(ref(db, "People/" + enterID.value), {
+                Name: enterName.value,
+                ID: enterID.value,
+                Date: enterDate.value,
+                Location: enterLocation.value,
+                Bio: enterBio.value
+            })
+            .then(()=>{
+                alert("Data added successfully");
+            })
+            .catch((error)=>{
+                alert(error);
             });
         }
 
-         // Function to manage data (insert, update, remove)
-        function manageData(action) {
-            const id = document.getElementById("enterID").value;
-            const name = document.getElementById("enterName").value;
-            const dateTaken = document.getElementById("enterDate").value;
-            const location = document.getElementById("enterLocation").value;
-            const bio = document.getElementById("enterBio").value;
+        function FindData() {
+            const dbref = ref(db);
 
-            if (!id) {
-                alert("Please enter an ID.");
-                return;
-            }
-
-            if (!name || !date || !location || !bio) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            const newData = {
-                name: name,
-                date: date,
-                location: location,
-                bio: bio
-            };
-
-            const dataRef = ref(db, "People/" + id);
-
-            switch (action) {
-                case 'insert':
-                    set(dataRef, newData)
-                        .then(() => {
-                            alert("Data added successfully");
-                            renderUserProfiles();
-                        })
-                        .catch((error) => {
-                            alert(error.message);
-                        });
-                    break;
-                case 'update':
-                    update(dataRef, newData)
-                        .then(() => {
-                            alert("Data updated successfully");
-                            renderUserProfiles();
-                        })
-                        .catch((error) => {
-                            alert(error.message);
-                        });
-                    break;
-                case 'remove':
-                    remove(dataRef)
-                        .then(() => {
-                            alert("Data deleted successfully");
-                            renderUserProfiles();
-                        })
-                        .catch((error) => {
-                            alert(error.message);
-                        });
-                    break;
-                default:
-                    alert("Invalid action.");
-            }
+            get(child(dbref, "People/" + findID.value))
+            .then((snapshot)=>{
+                if(snapshot.exists()){
+                    findName.innerHTML = "Name: " + snapshot.val().Name;
+                    findAge.innerHTML = "Age: " + snapshot.val().Age;
+                } else {
+                    alert("No data found");
+                }
+            })
+            .catch((error)=>{
+                alert(error)
+            })
+            
         }
 
-        // Event listener for DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', function () {
-            // Event listeners for buttons
-            const INSERT = document.getElementById('insert');
-            const UPDATE = document.getElementById('update');
-            const REMOVE = document.getElementById('remove');
+        function UpdateData(){
+            update(ref(db, "People/"+ enterID.value),{
+                Name: enterName.value,
+                Age: enterAge.value
+            })
+            .then(()=>{
+                alert("Data updated successfully");
+            })
+            .catch((error)=>{
+                alert(error);
+            });
+        }
 
-            INSERT.addEventListener('click', () => manageData('insert'));
-            UPDATE.addEventListener('click', () => manageData('update'));
-            REMOVE.addEventListener('click', () => manageData('remove'));
+        function RemoveData(){
+            remove(ref(db, "People/"+ enterID.value))
+            .then(()=>{
+                alert("Data deleted successfully");
+            })
+            .catch((error)=>{
+                alert(error);
+            });
+        }
 
-            // Render user profiles initially
-            renderUserProfiles();
-        });
+        insertBtn.addEventListener('click', InsertData);
+        updateBtn.addEventListener('click', UpdateData);
+        removeBtn.addEventListener('click', RemoveData);
+        findBtn.addEventListener('click', FindData);
+
+
+
+
+        
+        
+        
 
     </script>
 </body>
